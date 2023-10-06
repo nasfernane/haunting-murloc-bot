@@ -7,7 +7,7 @@ const client = new Client({
   ] 
 });
 
-const TOKEN = process.env.DISCORD_TOKEN;
+const { TOKEN, HAUNTED_USER } = process.env;
 
 const MURLOC_ACTIONS = [
   `Mat Murlock s'aventure prudemment hors de sa mare, ses yeux bulbeux scrutant les alentours. Il grogne "Mrrrgllll glrrm gl!", signifiant sa curiosité pour le monde extérieur.`,
@@ -37,13 +37,15 @@ async function randomHaunting() {
     
   for (let guild of guilds) {
     guild.members.fetch().then(async members => {
-      let member = members.find(m => m.user.username === 'biogoret');
+      let member = members.find(m => m.user.username === HAUNTED_USER);
       if (member) {
         console.log('Mat Murlock is haunting');
         try {
           let dmChannel = await member.createDM();
           let randomIndex = Math.floor(Math.random() * MURLOC_ACTIONS.length);
-          dmChannel.send(MURLOC_ACTIONS[randomIndex]);
+          let hauntingMessage = MURLOC_ACTIONS[randomIndex]
+          await dmChannel.send(hauntingMessage);
+          console.log('Murloc sent message:', hauntingMessage)
         } catch (err) {
           console.error('Erreur lors de l\'envoi du message', err);
         }
