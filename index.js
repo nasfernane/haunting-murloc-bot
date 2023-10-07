@@ -20,17 +20,32 @@ async function randomHaunting() {
       if (member) {
         console.log('Mat Murlock is haunting');
         try {
+          let hauntingMessage = getRandomHaunting();
           let dmChannel = await member.createDM();
-          let randomIndex = Math.floor(Math.random() * MURLOC_ACTIONS.length);
-          let hauntingMessage = MURLOC_ACTIONS[randomIndex];
           await dmChannel.send(hauntingMessage);
-          console.log(`Murloc is haunting ${HAUNTED_USER}: ${hauntingMessage}`);
+          console.log(`${getTime()} - Mat Murlock is haunting ${HAUNTED_USER}: ${hauntingMessage}`);
         } catch (err) {
-          console.error('Erreur lors de l\'envoi du message', err);
+          console.error(`Erreur lors de l'envoi du message`, err);
         }
       }
     })
   }
+}
+
+function getRandomHaunting() {
+  let randomIndex = Math.floor(Math.random() * MURLOC_ACTIONS.length);
+  return MURLOC_ACTIONS[randomIndex];
+}
+
+function getTime(timeZone = "Europe/Paris", country = "fr-FR") {
+  const dateOptions = {
+    timeZone: timeZone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }
+
+  return new Date().toLocaleTimeString(country, dateOptions);
 }
 
 client.once('ready', async () => {
